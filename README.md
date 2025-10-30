@@ -126,3 +126,4 @@ Step 7: Run the Tests
 	   3.	View interactive HTML report:
 	   
 	   npx playwright show-report
+# sauce_demo
