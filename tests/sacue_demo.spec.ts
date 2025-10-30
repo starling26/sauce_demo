@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Sauce Demo Login Tests', () => { 
+test.describe('Sauce Demo Login Tests', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('https://www.saucedemo.com/');
     });
@@ -214,7 +214,7 @@ test.describe('Sauce Demo Login Tests', () => {
         });
 
         await test.step('Verify error message', async () => {
-            await expect(page.getByText('Epic sadface: Sorry, this user has been locked out.')).toBeVisible();
+            await expect(page.getByText('Epic sadface: Sorry user error.')).toBeVisible();
         });
 
     });
@@ -222,5 +222,3 @@ test.describe('Sauce Demo Login Tests', () => {
 
 
 });
-
-
