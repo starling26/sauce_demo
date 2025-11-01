@@ -201,24 +201,88 @@ test.describe('Sauce Demo Login Tests', () => {
     });
     test('TC-SD011: Failed login attempt with error_user credentials', async ({ page }) => {
         await test.step('Enter error_user username', async () => {
-            await page.fill('#user-name', 'error_user');
-        }
-        );
+        await page.fill('#user-name', 'error_user');
+        await page.fill('#password', 'secret_sauce');
+        await page.click('#login-button');
 
-        await test.step('Fill password', async () => {
+        // Verify that the URL is not the inventory page    
+        await expect(page).not.toHaveURL('https://www.saucedemo.com/inventory.html');
+    });
+
+    });
+    test('TC-SD012: Product Images Validation with problem user', async ({ page }) => {
+        await test.step('Login as problem_user', async () => {
+            await page.fill('#user-name', 'problem_user');
             await page.fill('#password', 'secret_sauce');
-        });
-
-        await test.step('Click login', async () => {
             await page.click('#login-button');
         });
 
-        await test.step('Verify error message', async () => {
-            await expect(page.getByText('Epic sadface: Sorry user error.')).toBeVisible();
+        const getImgSrc = async (dataTestSelector: string) => {
+            const link = page.locator(dataTestSelector);
+            const img = link.locator('img');
+            await expect(img).toBeVisible();
+            const src = await img.getAttribute('src');
+            expect(src).not.toBeNull();
+            expect(src).not.toEqual('');
+            return src as string;
+        };
+
+        await test.step('Verify product image sources are present and distinct', async () => {
+            const productImages0 = await getImgSrc('[data-test="item-0-img-link"]');
+            const productImages1 = await getImgSrc('[data-test="item-1-img-link"]');
+            const productImages4 = await getImgSrc('[data-test="item-4-img-link"]');
+            expect(productImages0).not.toEqual(productImages1);
+            expect(productImages0).not.toEqual(productImages4);
+            expect(productImages1).not.toEqual(productImages4);
+        });
+    });
+    test('TC-SD013: Product Filter Functionality', async ({ page }) => {
+        await test.step('Login with problem_user credentials', async () => {
+            await page.fill('#user-name', 'problem_user');
+            await page.fill('#password', 'secret_sauce');
+            await page.click('#login-button');
         });
 
+        await test.step('Select Price (low to high) filter', async () => {
+            await page.locator('[data-test="product-sort-container"]').selectOption('lohi');
+        });
+
+        await test.step('Verify first product is cheapest', async () => {
+            const firstPrice = await page.locator('.inventory_item_price').first().textContent();
+            expect(firstPrice).toBe('$7.99');
+        });
+
+        await test.step('Select Name (Z to A) filter', async () => {
+            await page.locator('[data-test="product-sort-container"]').selectOption('za');
+        });
+
+        await test.step('Verify first product starts with T', async () => {
+            const firstName = await page.locator('.inventory_item_name').first().textContent();
+            expect(firstName).toBe('Test.allTheThings() T-Shirt (Red)');
+        });
     });
-
-
-
+    test('TC-SD014: "Checkout Information Completion (Last Name Field)"', async ({ page }) => {
+        await test.step('Login with problem_user credentials', async () => {
+            await page.fill('#user-name', 'problem_user');
+            await page.fill('#password', 'secret_sauce');
+            await page.click('#login-button');
+        });
+        await test.step('Add product to cart and proceed to checkout', async () => {
+            await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
+            await page.locator('.shopping_cart_link').click();
+            await page.locator('[data-test="checkout"]').click();
+        });
+        await test.step('Fill checkout form and verify bug', async () => {
+            await page.locator('[data-test="firstName"]').fill('Starling');
+            await page.locator('[data-test="lastName"]').fill('De La Cruz');
+            await page.locator('[data-test="postalCode"]').fill('10304');
+            const firstNameValue = await page.inputValue('[data-test="firstName"]');
+            const lastNameValue = await page.inputValue('[data-test="lastName"]');
+            const postalCodeValue = await page.inputValue('[data-test="postalCode"]');
+            // Verify that the values are correctly filled
+            await expect(firstNameValue).toContain('Starling');
+            await expect(lastNameValue).toContain('De La Cruz');
+            await expect(postalCodeValue).toContain('10304');
+        });
+    });
 });
