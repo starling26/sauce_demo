@@ -1,13 +1,13 @@
 
 
-    Sauce Demo Test Automation - Complete Test Suite
+Sauce Demo Test Automation - Complete Test Suite
 
-    What This Project Does
-    Project Description:
-    This project contains automated and manual test cases designed to verify the functionalities and workflows of the Sauce Demo e-commerce application.
-    
-    Main Objective:
-    Validate the proper functioning of authentication, product catalog, shopping cart, and checkout processes, ensuring that all business rules and user flows work correctly from login to order completion.
+What This Project Does
+Project Description:
+This project contains automated and manual test cases designed to verify the functionalities and workflows of the Sauce Demo e-commerce application.
+
+Main Objective:
+Validate the proper functioning of authentication, product catalog, shopping cart, and checkout processes, ensuring that all business rules and user flows work correctly from login to order completion.
 
  Technologies Used
  
