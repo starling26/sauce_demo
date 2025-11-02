@@ -287,5 +287,6 @@ test.describe('Sauce Demo Login Tests', () => {
             await expect(lastNameValue).toContain('De La Cruz');
             await expect(postalCodeValue).toContain('10304');
         }); 
+        
     });
 });
