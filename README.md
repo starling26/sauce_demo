@@ -14,7 +14,7 @@ Validate the proper functioning of authentication, product catalog, shopping car
 	•	Playwright - Modern web testing framework
 	•	TypeScript - Type-safe JavaScript
 	•	Node.js - JavaScript runtime environment
-	•	ParaBank - Demo banking application for testing
+	•	sauce_demo - Demo ecomerce
 
  Before You Start
 
