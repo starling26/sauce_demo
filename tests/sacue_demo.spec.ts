@@ -1,8 +1,11 @@
 import { expect, test } from '@playwright/test';
 
+
+
 test.describe('Sauce Demo Login Tests', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('https://www.saucedemo.com/');
+   
     });
 
     test('TC-SD001: Successful login with valid credentials', async ({ page }) => {
@@ -284,5 +287,6 @@ test.describe('Sauce Demo Login Tests', () => {
             await expect(lastNameValue).toContain('De La Cruz');
             await expect(postalCodeValue).toContain('10304');
         });
+        
     });
 });
